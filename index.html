@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2025 WSOP Main Event - Day 5 to Final Highlights</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+            animation: fadeInDown 1s ease;
+        }
+
+        h1 {
+            font-size: 3em;
+            background: linear-gradient(45deg, #ffd700, #ffed4e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            color: #a8a8a8;
+            margin-bottom: 30px;
+        }
+
+        .day-selector {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .day-btn {
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #2a2a3e 0%, #3a3a5e 100%);
+            border: 2px solid #ffd700;
+            border-radius: 25px;
+            color: #ffd700;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.2);
+        }
+
+        .day-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+            background: linear-gradient(135deg, #3a3a5e 0%, #4a4a6e 100%);
+        }
+
+        .day-btn.active {
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            color: #1a1a2e;
+        }
+
+        .timeline-container {
+            background: rgba(42, 42, 62, 0.5);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 40px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+        }
+
+        .timeline {
+            position: relative;
+            height: 80px;
+            background: linear-gradient(90deg, #2a2a3e 0%, #4a4a6e 100%);
+            border-radius: 40px;
+            overflow: hidden;
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .timeline-progress {
+            position: absolute;
+            height: 100%;
+            background: linear-gradient(90deg, #ffd700 0%, #ffed4e 100%);
+            border-radius: 40px;
+            transition: width 0.5s ease;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+
+        .timeline-markers {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .marker {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #ffffff;
+            border-radius: 50%;
+            border: 3px solid #ffd700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .marker:hover {
+            transform: scale(1.5);
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+        }
+
+        .marker-tooltip {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1a1a2e;
+            padding: 5px 10px;
+            border-radius: 5px;
+            white-space: nowrap;
+            font-size: 0.9em;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            border: 1px solid #ffd700;
+        }
+
+        .marker:hover .marker-tooltip {
+            opacity: 1;
+        }
+
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .video-card {
+            background: rgba(42, 42, 62, 0.7);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+        }
+
+        .video-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
+            border-color: #ffd700;
+        }
+
+        .video-thumbnail {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #2a2a3e 0%, #3a3a5e 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .video-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .play-overlay {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 215, 0, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .play-overlay::after {
+            content: '▶';
+            color: #1a1a2e;
+            font-size: 24px;
+            margin-left: 5px;
+        }
+
+        .video-card:hover .play-overlay {
+            transform: scale(1.2);
+            background: rgba(255, 215, 0, 1);
+        }
+
+        .video-info {
+            padding: 15px;
+        }
+
+        .video-title {
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #ffd700;
+        }
+
+        .video-time {
+            color: #a8a8a8;
+            font-size: 0.9em;
+        }
+
+        .video-player-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .video-player-modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            width: 90%;
+            max-width: 1200px;
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            color: #ffffff;
+            font-size: 30px;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close-modal:hover {
+            color: #ffd700;
+        }
+
+        video {
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 0 50px rgba(255, 215, 0, 0.3);
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: rgba(42, 42, 62, 0.7);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #ffd700;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #a8a8a8;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+            
+            .video-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .day-btn {
+                padding: 10px 20px;
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 파일 업로드 섹션 추가 -->
+    <div class="container">
+        <header>
+            <h1>2025 WSOP MAIN EVENT</h1>
+            <p class="subtitle">Championship Highlights Collection</p>
+        </header>
+
+        <!-- 로컬 비디오 파일 선택 섹션 -->
+        <div style="background: rgba(42, 42, 62, 0.7); border-radius: 15px; padding: 20px; margin-bottom: 30px; border: 1px solid rgba(255, 215, 0, 0.3);">
+            <h3 style="color: #ffd700; margin-bottom: 15px;">📁 동영상 파일 선택</h3>
+            <input type="file" id="videoFileInput" accept="video/mp4,video/*" multiple style="display: none;">
+            <button onclick="document.getElementById('videoFileInput').click()" style="padding: 10px 20px; background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%); border: none; border-radius: 10px; color: #1a1a2e; font-weight: bold; cursor: pointer; margin-right: 10px;">
+                파일 선택
+            </button>
+            <span id="selectedFiles" style="color: #a8a8a8; font-size: 0.9em;">선택된 파일 없음</span>
+            <div id="localVideoList" style="margin-top: 15px;"></div>
+        </div>
+
+        <div class="day-selector">
+            <button class="day-btn active" onclick="selectDay('day5')">Day 5</button>
+            <button class="day-btn" onclick="selectDay('day6')">Day 6</button>
+            <button class="day-btn" onclick="selectDay('day7')">Day 7</button>
+            <button class="day-btn" onclick="selectDay('day8')">Day 8</button>
+            <button class="day-btn" onclick="selectDay('final')">FINAL TABLE</button>
+        </div>
+
+        <div class="stats-container">
+            <div class="stat-card">
+                <div class="stat-number" id="totalClips">25</div>
+                <div class="stat-label">Total Clips</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="currentDay">Day 5</div>
+                <div class="stat-label">Current Day</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalDuration">2h 45m</div>
+                <div class="stat-label">Total Duration</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="prizePool">$12.1M</div>
+                <div class="stat-label">Prize Pool</div>
+            </div>
+        </div>
+
+        <div class="timeline-container">
+            <div class="timeline">
+                <div class="timeline-progress" style="width: 20%"></div>
+                <div class="timeline-markers" id="timelineMarkers">
+                    <!-- 마커들이 동적으로 추가됩니다 -->
+                </div>
+            </div>
+        </div>
+
+        <div class="video-grid" id="videoGrid">
+            <!-- 비디오 카드들이 동적으로 추가됩니다 -->
+        </div>
+    </div>
+
+    <div class="video-player-modal" id="videoModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeVideoModal()">&times;</span>
+            <video id="modalVideo" controls>
+                <source src="" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+    </div>
+
+    <script>
+        // 실제 비디오 파일 경로를 입력하세요
+        // 방법 1: 로컬 파일 시스템 (HTML 파일과 같은 폴더에 동영상 저장)
+        // 방법 2: YouTube/Vimeo 임베드 URL 사용
+        // 방법 3: 클라우드 스토리지 (Google Drive, Dropbox 등) 공유 링크
+        const videoData = {
+            day5: [
+                { id: 1, title: "Day 5 Part 1", time: "오후 3:20:16", duration: "03:20:16", thumbnail: "", videoUrl: "2025 WSOPD5/화면녹화_Day 5 (Part 1).mp4", position: 10, fileSize: "27.5MB" },
+                { id: 2, title: "Day 5 Part 2", time: "오후 3:21:01", duration: "03:21:01", thumbnail: "", videoUrl: "2025 WSOPD5/화면녹화_Day 5 (Part 2).mp4", position: 25, fileSize: "27.5MB" },
+                { id: 3, title: "Day 5 Part 3", time: "오후 3:21:01", duration: "03:21:01", thumbnail: "", videoUrl: "2025 WSOPD5/화면녹화_Day 5 (Part 3).mp4", position: 45, fileSize: "27.5MB" },
+                { id: 4, title: "Day 5 Highlights", time: "Evening", duration: "15:10", thumbnail: "", videoUrl: "2025 WSOPD5/day5_highlights.mp4", position: 65 },
+                { id: 5, title: "End of Day 5", time: "23:30", duration: "09:55", thumbnail: "", videoUrl: "2025 WSOPD5/day5_final.mp4", position: 85 }
+            ],
+            day6: [
+                { id: 6, title: "Day 6 Kickoff", time: "14:00", duration: "11:20", thumbnail: "", videoUrl: "day6_clip1.mp4", position: 15 },
+                { id: 7, title: "Big Bluff", time: "16:30", duration: "07:45", thumbnail: "", videoUrl: "day6_clip2.mp4", position: 35 },
+                { id: 8, title: "Elimination", time: "19:00", duration: "13:15", thumbnail: "", videoUrl: "day6_clip3.mp4", position: 55 },
+                { id: 9, title: "Chip Leader Change", time: "21:30", duration: "10:30", thumbnail: "", videoUrl: "day6_clip4.mp4", position: 75 }
+            ],
+            day7: [
+                { id: 10, title: "Day 7 Start", time: "14:00", duration: "12:00", thumbnail: "", videoUrl: "day7_clip1.mp4", position: 20 },
+                { id: 11, title: "Triple Up", time: "17:00", duration: "09:30", thumbnail: "", videoUrl: "day7_clip2.mp4", position: 40 },
+                { id: 12, title: "Final 27", time: "20:00", duration: "14:45", thumbnail: "", videoUrl: "day7_clip3.mp4", position: 60 },
+                { id: 13, title: "Last Hand", time: "23:00", duration: "11:20", thumbnail: "", videoUrl: "day7_clip4.mp4", position: 80 }
+            ],
+            day8: [
+                { id: 14, title: "Final Day Begin", time: "14:00", duration: "13:30", thumbnail: "", videoUrl: "day8_clip1.mp4", position: 25 },
+                { id: 15, title: "Key Elimination", time: "17:30", duration: "10:15", thumbnail: "", videoUrl: "day8_clip2.mp4", position: 50 },
+                { id: 16, title: "Final Table Set", time: "21:00", duration: "16:40", thumbnail: "", videoUrl: "day8_clip3.mp4", position: 75 }
+            ],
+            final: [
+                { id: 17, title: "Final Table Intro", time: "15:00", duration: "20:00", thumbnail: "", videoUrl: "final_clip1.mp4", position: 10 },
+                { id: 18, title: "First Elimination", time: "16:30", duration: "12:30", thumbnail: "", videoUrl: "final_clip2.mp4", position: 25 },
+                { id: 19, title: "Massive Pot", time: "18:00", duration: "15:45", thumbnail: "", videoUrl: "final_clip3.mp4", position: 40 },
+                { id: 20, title: "Heads Up Begin", time: "22:00", duration: "18:20", thumbnail: "", videoUrl: "final_clip4.mp4", position: 60 },
+                { id: 21, title: "Champion Crowned", time: "23:45", duration: "25:00", thumbnail: "", videoUrl: "final_clip5.mp4", position: 85 }
+            ]
+        };
+
+        let currentDay = 'day5';
+
+        function selectDay(day) {
+            currentDay = day;
+            
+            // 버튼 활성화 상태 변경
+            document.querySelectorAll('.day-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // 통계 업데이트
+            updateStats(day);
+            
+            // 비디오 그리드 업데이트
+            updateVideoGrid(day);
+            
+            // 타임라인 마커 업데이트
+            updateTimelineMarkers(day);
+        }
+
+        function updateStats(day) {
+            const dayDisplay = day === 'final' ? 'FINAL' : `Day ${day.slice(3)}`;
+            document.getElementById('currentDay').textContent = dayDisplay;
+            document.getElementById('totalClips').textContent = videoData[day].length;
+            
+            // 총 재생시간 계산 (샘플)
+            let totalMinutes = 0;
+            videoData[day].forEach(video => {
+                const [min, sec] = video.duration.split(':').map(Number);
+                totalMinutes += min + sec/60;
+            });
+            const hours = Math.floor(totalMinutes / 60);
+            const minutes = Math.round(totalMinutes % 60);
+            document.getElementById('totalDuration').textContent = `${hours}h ${minutes}m`;
+        }
+
+        function updateVideoGrid(day) {
+            const grid = document.getElementById('videoGrid');
+            grid.innerHTML = '';
+            
+            videoData[day].forEach(video => {
+                const card = document.createElement('div');
+                card.className = 'video-card';
+                card.onclick = () => playVideo(video.videoUrl, video.title);
+                
+                card.innerHTML = `
+                    <div class="video-thumbnail">
+                        ${video.thumbnail ? `<img src="${video.thumbnail}" alt="${video.title}">` : ''}
+                        <div class="play-overlay"></div>
+                    </div>
+                    <div class="video-info">
+                        <div class="video-title">${video.title}</div>
+                        <div class="video-time">Time: ${video.time} | Duration: ${video.duration}</div>
+                    </div>
+                `;
+                
+                grid.appendChild(card);
+            });
+        }
+
+        function updateTimelineMarkers(day) {
+            const markersContainer = document.getElementById('timelineMarkers');
+            markersContainer.innerHTML = '';
+            
+            videoData[day].forEach(video => {
+                const marker = document.createElement('div');
+                marker.className = 'marker';
+                marker.style.left = `${video.position}%`;
+                marker.onclick = () => playVideo(video.videoUrl, video.title);
+                
+                const tooltip = document.createElement('div');
+                tooltip.className = 'marker-tooltip';
+                tooltip.textContent = `${video.title} (${video.time})`;
+                marker.appendChild(tooltip);
+                
+                markersContainer.appendChild(marker);
+            });
+            
+            // 타임라인 진행률 업데이트
+            const progress = document.querySelector('.timeline-progress');
+            const dayProgress = {
+                'day5': '20%',
+                'day6': '40%',
+                'day7': '60%',
+                'day8': '80%',
+                'final': '100%'
+            };
+            progress.style.width = dayProgress[day];
+        }
+
+        function playVideo(videoUrl, title) {
+            const modal = document.getElementById('videoModal');
+            const video = document.getElementById('modalVideo');
+            
+            // 여기에 실제 비디오 파일 경로를 설정하세요
+            video.src = videoUrl;
+            video.load();
+            
+            modal.classList.add('active');
+            video.play();
+        }
+
+        function closeVideoModal() {
+            const modal = document.getElementById('videoModal');
+            const video = document.getElementById('modalVideo');
+            
+            video.pause();
+            video.src = '';
+            modal.classList.remove('active');
+        }
+
+        // 모달 외부 클릭시 닫기
+        document.getElementById('videoModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeVideoModal();
+            }
+        });
+
+        // ESC 키로 모달 닫기
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeVideoModal();
+            }
+        });
+
+        // 초기 로드
+        window.onload = function() {
+            updateStats('day5');
+            updateVideoGrid('day5');
+            updateTimelineMarkers('day5');
+        };
+    </script>
+</body>
+</html>
